@@ -15,9 +15,11 @@ MATLAB scripts for producing figures from our paper - https://arxiv.org/abs/1911
 ### Figure 5 (panel A) 
 - savanna_model_1D_periodic_boundary_IDE.m 
 - spatial_particle_system_periodic_boundary.m
+
 Both codes for Figure 5 (panel A) require progressbar.m and spatial_particle_system_periodic_boundary.m requires circ_dist.m
                    
 ### Figure 5 (panel B) 
 - savanna_model_1D_reflecting_boundary_IDE_nonuniform_sites.m
 - spatial_particle_system_reflecting_boundary_nonuniform_sites.m
+
 The code savanna_model_1D_reflecting_boundary_IDE_nonuniform_sites.m requires progressbar.m
