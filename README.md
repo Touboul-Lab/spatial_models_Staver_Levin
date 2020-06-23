@@ -7,8 +7,6 @@ MATLAB scripts for producing figures from our paper - https://arxiv.org/abs/1911
 ### Figure 3 
 - QSD_final.m 
 - AbsorptionRate.m
-- spatial_particle_system_periodic_boundary.m
-
 
 ### Figure 4 
 - Poisson_full_model.m 
