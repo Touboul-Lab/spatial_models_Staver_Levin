@@ -12,14 +12,13 @@ No_Abs=1;
 % Spatial Parameters
 L = 5; % working on [0,L]
 dist = @(a,x) circ_dist(a,x,L);
-J_F_fun = @(x, a, sigma_F) exp( -( dist(a,x).^2)/(2*sigma_F^2) )/sqrt(2*pi*sigma_F^2);
-W_fun = @(x, a, sigma_W) exp( -( dist(a,x).^2 )/(2*sigma_W^2) )/sqrt(2*pi*sigma_W^2);
+kernel = @(x, a, sigma) exp( -( dist(a,x).^2)/(2*sigma^2))/(sqrt(2*pi)*sigma*(2*normcdf(L/(2*sigma))-1));
 
 sigma_F = 0.05; % seed dispersal radius forest trees
 sigma_W = 0.05; % fire radius
 
 % Model Parameters
-alpha = 1.25;
+alpha = 0.5;
 
 t2=0.4;
 f0=0.1;
@@ -56,15 +55,15 @@ for iteration=1:MC
     Solution=zeros(NTot,1);
     Locations=sort(L*rand(sites,1));
     [A,B]=meshgrid(Locations);
-    J_Mat = L*J_F_fun(A,B,sigma_F)/sites; % divide by number of sites for mean-field scaling
-    W_Mat = L*W_fun(A,B,sigma_W)/sites;
+    J_Mat = L*kernel(A,B,sigma_F)/sites; % divide by number of sites for mean-field scaling
+    W_Mat = L*kernel(A,B,sigma_W)/sites; % multiplication by L for normalization
     
-    % check that the normalization of the kernels is correct
+%     % check that the normalization of the kernels is correct
 %     locations_reg = L*(1/sites:1/sites:1);
 %     [X,Y] = meshgrid(locations_reg);
 %     %[X_L,Y_L] = meshgrid(locations_reg-L-1/sites);
 %     %[X_R,Y_R] = meshgrid(L+ 1/sites + locations_reg);
-%     J_Mat_regular = L*(J_F_fun(X,Y,sigma_F))/sites;% + J_F_fun(X,Y_L,sigma_F) + J_F_fun(X,Y_R,sigma_F) )/sites;
+%     J_Mat_regular = kernel(X,Y,sigma_F);% + J_F_fun(X,Y_L,sigma_F) + J_F_fun(X,Y_R,sigma_F) )/sites;
 %     plot(sum(J_Mat_regular));
     
     Solution(:,1)=rand(NTot,1)<p_grass;
@@ -123,7 +122,7 @@ Z=100;
 
 V=squeeze(mean(Sol_Save,1));
 U=squeeze(mean(reshape(V,sites/Z,Z,[]),1));
-figure;
+figure(2);
 [x,y]=meshgrid(0:dt:Times(end),5*(1:Z)/Z);
 pcolor(x,y,flipud(U))
 shading interp;
